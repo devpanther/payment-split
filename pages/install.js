@@ -16,6 +16,7 @@ function install() {
         if(data?.details.length > 0){
             setscriptTagID(data.details[0].id)
         }
+        
     }
 
     useEffect(() => {
