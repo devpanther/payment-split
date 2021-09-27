@@ -7,7 +7,7 @@ router.get('/', async(ctx) => {
 })
 
 router.get('/all', async(ctx) => {
-    const result = await getAllScriptTags(ctx.myClient, "https://facebook.com/");
+    const result = await getAllScriptTags(ctx.myClient, "https://techicovery.com/shopify-apps/split-payment/global.js");
     ctx.body = {
         installed: result.length > 0,
         details: result,

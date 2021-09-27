@@ -97,7 +97,7 @@ app.prepare().then(async () => {
         }
 
         console.log('update theme');
-        updateTheme(shop, accessToken);
+        //updateTheme(shop, accessToken);
 
         // Redirect to app with shop parameter upon auth
         ctx.redirect(`/?shop=${shop}&host=${host}`);

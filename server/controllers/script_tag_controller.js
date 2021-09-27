@@ -5,7 +5,7 @@ export const createScriptTag = async (client) => {
         const data = {
             script_tag: {
                 event: 'onload',
-                src: 'https://facebook.com'
+                src: 'https://techicovery.com/shopify-apps/split-payment/global.js'
             }
         }
         const result = await client.post({

@@ -1,3 +1,6 @@
-{% if content_for_header contains 'facebook.com' %}
-    {% render 'banner-app' %}
+{% if content_for_header contains 'techicovery.com/shopify-apps/split-payment/global.js' %}
+    {%- assign templateBase = template | slice: 0, 4 -%}
+    {%- if templateBase == 'cart' -%}
+            {% render 'banner-app' %}
+    {%- endif -%}
 {% endif %}
