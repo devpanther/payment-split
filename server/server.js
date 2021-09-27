@@ -12,6 +12,7 @@ import routes from './router/index';
 
 import { Session } from '@shopify/shopify-api/dist/auth/session';
 import { updateTheme } from "./updateTheme/updateTheme";
+import MongoStore from "./mongo-connect";
 
 dotenv.config();
 const port = parseInt(process.env.PORT, 10) || 8081;
@@ -20,34 +21,8 @@ const app = next({
   dev,
 });
 const handle = app.getRequestHandler();
-const FILENAME = "./session.json"
 
-function storeCallback(session){
-  console.log(session);
-  fs.writeFileSync(FILENAME, JSON.stringify(session))
-  return true
-}
-
-function loadCallback(){
-  if(fs.existsSync(FILENAME)){
-    const sessionResult = fs.readFileSync(FILENAME, 'utf-8');
-    return Object.assign(
-      new Session,
-      JSON.parse(sessionResult)
-    );
-  }
-  return false;
-}
-
-function deleteCallback(id){
-  console.log('deleteCallback', id)
-}
-
-const sessionStorage = new Shopify.Session.CustomSessionStorage(
-  storeCallback,
-  loadCallback,
-  deleteCallback
-)
+const sessionStorage = new MongoStore()
 
 Shopify.Context.initialize({
   API_KEY: process.env.SHOPIFY_API_KEY,
@@ -57,17 +32,21 @@ Shopify.Context.initialize({
   API_VERSION: ApiVersion.October20,
   IS_EMBEDDED_APP: true,
   // This should be replaced with your preferred storage strategy
-  SESSION_STORAGE: new Shopify.Session.MemorySessionStorage,
+  SESSION_STORAGE: new Shopify.Session.CustomSessionStorage(
+    sessionStorage.storeCallback,
+    sessionStorage.loadCallback,
+    sessionStorage.deleteCallback,
+  ),
 });
 
 // Storing the currently active shops in memory will force them to re-login when your server restarts. You should
 // persist this object in your app.
 const ACTIVE_SHOPIFY_SHOPS = {};
-// const session = loadCallback();
-// if(session?.shop && session?.scope){
-//   console.log("session", session)
-//   ACTIVE_SHOPIFY_SHOPS[session.shop] = session.scope;
-// }
+const session = loadCallback();
+if(session?.shop && session?.scope){
+  console.log("session", session)
+  ACTIVE_SHOPIFY_SHOPS[session.shop] = session.scope;
+}
 
 app.prepare().then(async () => {
   const server = new Koa();
@@ -129,7 +108,7 @@ app.prepare().then(async () => {
   );
 
   async function injectSession(ctx, next) {
-    const session = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res);
+    const session = await loadCallback();
     ctx.sesionFromToken = session;
     if(session?.shop && session?.accessToken){
       const client = new Shopify.Clients.Rest(session.shop, session.accessToken);
