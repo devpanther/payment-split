@@ -31,6 +31,7 @@ class MongoStore {
 
     async storeCallback(session){
         const user = new userModel(session);
+        console.log(session)
         try {
             await user.save();
             console.log(user);
@@ -46,6 +47,7 @@ class MongoStore {
         const users = await userModel.find({
             "id": id
         });
+        console.log('load')
         try {
             console.log(users);
         } catch (error) {
