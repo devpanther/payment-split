@@ -14,7 +14,7 @@ const UserSchema = new mongoose.Schema({
         required: true,
     },
     isOnline: {
-        type: String,
+        type: Boolean,
         required: true,
     },
     accessToken: {
