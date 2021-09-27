@@ -57,17 +57,17 @@ Shopify.Context.initialize({
   API_VERSION: ApiVersion.October20,
   IS_EMBEDDED_APP: true,
   // This should be replaced with your preferred storage strategy
-  SESSION_STORAGE: sessionStorage,
+  SESSION_STORAGE: new Shopify.Session.MemorySessionStorage,
 });
 
 // Storing the currently active shops in memory will force them to re-login when your server restarts. You should
 // persist this object in your app.
 const ACTIVE_SHOPIFY_SHOPS = {};
-const session = loadCallback();
-if(session?.shop && session?.scope){
-  console.log("session", session)
-  ACTIVE_SHOPIFY_SHOPS[session.shop] = session.scope;
-}
+// const session = loadCallback();
+// if(session?.shop && session?.scope){
+//   console.log("session", session)
+//   ACTIVE_SHOPIFY_SHOPS[session.shop] = session.scope;
+// }
 
 app.prepare().then(async () => {
   const server = new Koa();
@@ -129,7 +129,7 @@ app.prepare().then(async () => {
   );
 
   async function injectSession(ctx, next) {
-    const session = await loadCallback();
+    const session = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res);
     ctx.sesionFromToken = session;
     if(session?.shop && session?.accessToken){
       const client = new Shopify.Clients.Rest(session.shop, session.accessToken);
