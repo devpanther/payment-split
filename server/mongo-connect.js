@@ -30,20 +30,17 @@ class MongoStore {
     }
 
     async storeCallback(session){
-        if(session?.accessToken){
-            const user = new userModel(session);
-            console.log(session)
-            try {
-                await user.save();
-                console.log(user);
-            } catch (error) {
-                console.log(error);
-            }
-            // console.log(session);
-            // fs.writeFileSync(FILENAME, JSON.stringify(session))
-            return true;
+        const user = new userModel(session);
+        console.log(session)
+        try {
+            await user.save();
+            console.log(user);
+        } catch (error) {
+            console.log(error);
         }
-        return false;
+        // console.log(session);
+        // fs.writeFileSync(FILENAME, JSON.stringify(session))
+        return true;
     }
 
     async loadCallback(id){
