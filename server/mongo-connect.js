@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const userModel = require("./models/user");
-
+import { Session } from '@shopify/shopify-api/dist/auth/session';
 
 const username = "Godstime";
 const password = "Lqx3E4116690";
@@ -50,6 +50,17 @@ class MongoStore {
         console.log('load')
         try {
             console.log(users);
+            if (users.length > 0) {
+                let session = new Session(id);
+
+                session.shop = result[0].session;
+                session.state = result[0].state;
+                session.isOnline = result[0].isOnline;
+
+                return session;
+            } else {
+                return undefined;
+            }
         } catch (error) {
             console.log(error);
         }

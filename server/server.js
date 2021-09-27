@@ -9,9 +9,6 @@ import Router from "koa-router";
 import fs from 'fs';
 
 import routes from './router/index';
-
-import { Session } from '@shopify/shopify-api/dist/auth/session';
-import { updateTheme } from "./updateTheme/updateTheme";
 import MongoStore from "./mongo-connect";
 
 dotenv.config();
