@@ -53,9 +53,9 @@ class MongoStore {
             if (users.length > 0) {
                 let session = new Session(id);
 
-                session.shop = result[0].session;
-                session.state = result[0].state;
-                session.isOnline = result[0].isOnline;
+                session.shop = users[0].session;
+                session.state = users[0].state;
+                session.isOnline = users[0].isOnline;
 
                 return session;
             } else {
