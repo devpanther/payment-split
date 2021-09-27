@@ -41,8 +41,9 @@ class MongoStore {
             }
             // console.log(session);
             // fs.writeFileSync(FILENAME, JSON.stringify(session))
+            return true;
         }
-        return true
+        return false;
     }
 
     async loadCallback(id){
@@ -61,7 +62,7 @@ class MongoStore {
 
                 return session;
             } else {
-                return undefined;
+                return false;
             }
         } catch (error) {
             console.log(error);
