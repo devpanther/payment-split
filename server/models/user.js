@@ -17,10 +17,10 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
     },
-    accessToken: {
-        type: String,
-        required: true,
-    },
+    // accessToken: {
+    //     type: String,
+    //     required: true,
+    // },
 });
 
 const User = mongoose.model("users", UserSchema);
