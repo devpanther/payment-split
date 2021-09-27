@@ -42,7 +42,7 @@ Shopify.Context.initialize({
 // Storing the currently active shops in memory will force them to re-login when your server restarts. You should
 // persist this object in your app.
 const ACTIVE_SHOPIFY_SHOPS = {};
-const session = loadCallback();
+const session = sessionStorage.loadCallback;
 if(session?.shop && session?.scope){
   console.log("session", session)
   ACTIVE_SHOPIFY_SHOPS[session.shop] = session.scope;
@@ -108,7 +108,7 @@ app.prepare().then(async () => {
   );
 
   async function injectSession(ctx, next) {
-    const session = await loadCallback();
+    const session = await sessionStorage.loadCallback;
     ctx.sesionFromToken = session;
     if(session?.shop && session?.accessToken){
       const client = new Shopify.Clients.Rest(session.shop, session.accessToken);
