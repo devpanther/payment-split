@@ -12,7 +12,7 @@ function install() {
     const bodyDescription = isInstalled ? "installed" : "uninstalled";
 
     async function fetchScriptTags(){
-        const {data} = await axios.get(`https://8a77-160-152-30-29.ngrok.io/script_tag/all`);
+        const {data} = await axios.get(`https://split-payment-shopify.herokuapp.com/script_tag/all`);
         console.log('initial script', data);
         setIsInstalled(data?.installed);
         if(data?.details.length > 0){
@@ -27,9 +27,9 @@ function install() {
 
     const handleAction = async () => {
         if(!isInstalled){
-            axios.post(`https://8a77-160-152-30-29.ngrok.io/script_tag`)
+            axios.post(`https://split-payment-shopify.herokuapp.com/script_tag`)
         }else{
-            axios.delete(`https://8a77-160-152-30-29.ngrok.io/script_tag?id=${scriptTagID}`);
+            axios.delete(`https://split-payment-shopify.herokuapp.com/script_tag?id=${scriptTagID}`);
         }
         setIsInstalled(oldValue => !oldValue);
     }
